@@ -1,4 +1,8 @@
 import React from 'react';
+import axios from 'axios';
+
+import { LoginView } from '../login-view/login-view';
+import { RegistrationView } from '../registration-view/registration-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 
@@ -7,25 +11,51 @@ export class MainView extends React.Component {
   constructor() {
     super();
     this.state = {
-      movies: [
-        {_id: 1, Title: 'Iron-Man', Description: 'desc1...', ImagePath: 'https://m.media-amazon.com/images/I/91qvAndeVYL._AC_UY218_.jpg'},
-        {_id: 2, Title: 'Avengers Endgame', Description: 'desc2...', ImagePath: 'https://m.media-amazon.com/images/I/91e9898R7QL._AC_UY218_.jpg'},
-        {_id: 3, Title: 'Spider-Man Homecoming', Description: 'desc3...', ImagePath:'https://m.media-amazon.com/images/I/91mhJDbpH3L._AC_UY218_.jpg'}
-      ],
-      selectedMovie: null
+      movies: [],
+      selectedMovie: null,
+      user: null,
+      registration: null
     };
   }
 
-  setSelectedMovie(newSelectedMovie) {
+  componentDidMount(){
+    axios.get('https://myflixmarvelapp.herokuapp.com/movies')
+      .then(response => {
+        this.setState({
+          movies: response.data
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  setSelectedMovie(movie) {
     this.setState({
-      selectedMovie: newSelectedMovie
+      selectedMovie: movie
+    });
+  }
+
+  onLoggedIn(user) {
+    this.setState({
+      user
+    });
+  }
+
+  onRegistration(registration) {
+    this.setState({
+      registration
     });
   }
 
   render() { // Render can only have one root element
-    const {movies, selectedMovie} = this.state;
+    const {movies, selectedMovie, user} = this.state;
 
-    if (movies.length === 0) return <div className = "main-view">Ths list is empty!</div>
+    if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+
+    if (!user) return <RegistrationView onRegistration={user => this.onRegistration(user)} />
+
+    if (movies.length === 0) return <div className = "main-view" />;
 
     return (
       <div className="main-view">
