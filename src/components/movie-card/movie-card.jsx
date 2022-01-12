@@ -3,9 +3,11 @@ import PropTypes from "prop-types";
 import { Card, Button, Container } from "react-bootstrap";
 import "./movie-card.scss";
 
+import { Link } from "react-router-dom";
+
 export class MovieCard extends React.Component {
   render() {
-    const { movie, onMovieClick } = this.props;
+    const { movie } = this.props;
 
     return (
       <Container className="movie-container">
@@ -14,9 +16,11 @@ export class MovieCard extends React.Component {
           <Card.Body>
             <Card.Title>{movie.Title}</Card.Title>
             <Card.Text>{movie.Description}</Card.Text>
-            <Button onClick={() => onMovieClick(movie)} variant="dark">
-              More Details
-            </Button>
+            <Link to={`/movies/${movie._id}`}>
+              <Button variant="link" variant="dark">
+                More Details
+              </Button>
+            </Link>
           </Card.Body>
         </Card>
       </Container>

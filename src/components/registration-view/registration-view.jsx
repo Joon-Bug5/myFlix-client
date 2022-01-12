@@ -9,6 +9,7 @@ import {
   Col,
   Row,
 } from "react-bootstrap";
+import axios from "axios";
 
 export function RegistrationView(props) {
   const [username, setUsername] = userState("");
@@ -18,7 +19,21 @@ export function RegistrationView(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.onRegistration(username);
+    axios
+      .post("https://myflixmarvelapp.herokuapp.com/users", {
+        Username: username,
+        Password: password,
+        Email: email,
+        Birthday: birthday,
+      })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        window.open("/", "_self"); // second argument '_self' is necessary so it will open page in the current tab
+      })
+      .catch((e) => {
+        console.log("error registering the user");
+      });
   };
 
   return (

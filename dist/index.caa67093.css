@@ -46,6 +46,23 @@ body,
   text-align: center;
   margin: 15px;
 }
+.genre-card {
+  text-align: center;
+  margin: 5px;
+}
+
+.genre-button {
+  margin: 5px;
+}
+.director-card {
+  text-align: center;
+  margin: 5px;
+}
+
+.director-button {
+  margin: 5px;
+}
+
 * {
   box-sizing: border-box;
 }

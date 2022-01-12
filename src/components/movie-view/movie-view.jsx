@@ -4,6 +4,29 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import "./movie-view.scss";
 
 export class MovieView extends React.Component {
+  favoriteMovie() {
+    const Username = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    const { movie } = this.props;
+
+    axios
+      .post(
+        `https://myflixmarvelapp.herokuapp.com/users/${Username}/favorites/${movie._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        console.log(movie._id);
+        alert("Added to Favorites");
+        this.componentDidMount();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   keypressCallback(event) {
     console.log(event.key);
   }
@@ -12,8 +35,12 @@ export class MovieView extends React.Component {
     document.addEventListener("keypress", this.keypressCallback);
   }
 
-  componentWillUnmount() {
-    document.removeEventListener("keypress", this.keypressCallback);
+  onLoggedOut() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    this.setState({
+      user: null,
+    });
   }
 
   render() {
@@ -44,6 +71,24 @@ export class MovieView extends React.Component {
                 >
                   Back
                 </button>
+
+                <Button
+                  variant="outline-primary"
+                  className="btn-outline-primary"
+                  onClick={() => {
+                    this.addToFavs();
+                  }}
+                >
+                  Add to Favorites
+                </Button>
+
+                <Link to={`/directors/${movie.Director.Name}`}>
+                  <Button variant="link">Director</Button>
+                </Link>
+
+                <Link to={`/genres/${movie.Genre.Name}`}>
+                  <Button variant="link">Genre</Button>
+                </Link>
               </div>
             </Col>
           </Row>
