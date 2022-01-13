@@ -12,23 +12,24 @@ import {
 import axios from "axios";
 
 export function RegistrationView(props) {
-  const [username, setUsername] = userState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [birthday, setBirthday] = useState("");
+  const [Username, setUsername] = useState("");
+  const [Password, setPassword] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Birthday, setBirthday] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post("https://myflixmarvelapp.herokuapp.com/users", {
-        Username: username,
-        Password: password,
-        Email: email,
-        Birthday: birthday,
+        Username: Username,
+        Password: Password,
+        Email: Email,
+        Birthday: Birthday,
       })
       .then((response) => {
         const data = response.data;
         console.log(data);
+        alert("Registered!");
         window.open("/", "_self"); // second argument '_self' is necessary so it will open page in the current tab
       })
       .catch((e) => {
@@ -43,12 +44,12 @@ export function RegistrationView(props) {
           <CardGroup>
             <Card>
               <Card.Title>Please Register</Card.Title>
-              <Form>
+              <Form onSubmit={this.handleSubmit}>
                 <Form.Group>
                   <Form.Label>Username:</Form.Label>
                   <Form.Control
                     type="text"
-                    value={username}
+                    value={Username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
                     placeholder="Enter username"
@@ -59,10 +60,10 @@ export function RegistrationView(props) {
                   <Form.Label>Password:</Form.Label>
                   <Form.Control
                     type="password"
-                    value={password}
+                    value={Password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    minLength="8"
+                    minLength="5"
                     placeholder="Enter a password"
                   />
                 </Form.Group>
@@ -71,7 +72,7 @@ export function RegistrationView(props) {
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     type="email"
-                    value={email}
+                    value={Email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
@@ -80,8 +81,8 @@ export function RegistrationView(props) {
                 <Form.Group>
                   <Form.Label>Birthday</Form.Label>
                   <Form.Control
-                    type="birthday"
-                    value={birthday}
+                    type="date"
+                    value={Birthday}
                     onChange={(e) => setBirthday(e.target.value)}
                     required
                   />

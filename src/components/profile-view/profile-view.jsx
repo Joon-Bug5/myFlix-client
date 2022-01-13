@@ -1,13 +1,12 @@
-import React from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Form, Button, Card, Container, Row, Col } from "react-bootstrap";
 import "./profile-view.scss";
+import axios from "axios";
 
 export class ProfileView extends React.Component {
   constructor() {
     super();
-
     this.state = {
       Username: null,
       Password: null,
@@ -18,7 +17,7 @@ export class ProfileView extends React.Component {
   }
 
   componentDidMount() {
-    let accessToken = localStorage.getItem("token");
+    const accessToken = localStorage.getItem("token");
     this.getUser(accessToken);
   }
 
@@ -28,13 +27,13 @@ export class ProfileView extends React.Component {
     this.setState({
       user: null,
     });
+    window.open("/", "_self");
   }
 
-  // Current User
-  getUser(token) {
-    const username = localStorage.getItem("user");
+  getUser = (token) => {
+    const Username = localStorage.getItem("user");
     axios
-      .get(`https://myflixmarvelapp.herokuapp.com/users/${username}`, {
+      .get(`https://myflixmarvelapp.herokuapp.com/users/${Username}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -49,24 +48,24 @@ export class ProfileView extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
-  }
-
-  // Edit Current User
-  editUser(e) {
+  };
+  // Allow user to edit or update profile
+  editUser = (e) => {
     e.preventDefault();
-    const username = localStorage.getItem("user");
+    const Username = localStorage.getItem("user");
     const token = localStorage.getItem("token");
-
     axios
       .put(
-        `https://myflixmarvelapp.herokuapp.com/users/${username}`,
+        `https://myflixmarvelapp.herokuapp.com/users/${Username}`,
         {
           Username: this.state.Username,
           Password: this.state.Password,
           Email: this.state.Email,
           Birthday: this.state.Birthday,
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       )
       .then((response) => {
         this.setState({
@@ -75,84 +74,74 @@ export class ProfileView extends React.Component {
           Email: response.data.Email,
           Birthday: response.data.Birthday,
         });
-
         localStorage.setItem("user", this.state.Username);
         const data = response.data;
         console.log(data);
-        window.open("/", "_self");
-      })
-      .catch((e) => {
-        console.log(error);
-      });
-  }
-
-  // Delete Favorite Movies
-  removeFavorite = (e, movie) => {
-    const username = localStorage.getItem("user");
-    console.log(username);
-    const token = localStorage.getItem("token");
-    console.log(this.props);
-    axios
-      .delete(
-        `https://myflixmarvelapp.herokuapp.com/users/${username}/favorites/${movie._id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
-      .then((response) => {
-        console.log(response);
-        alert("Movie was deleted");
-        this.componentDidMount();
+        console.log(this.state.Username);
+        alert("Updated Profile");
+        window.open(`/users/${Username}`, "_self");
       })
       .catch(function (error) {
         console.log(error);
       });
   };
 
-  // Delete Current User
+  deleteFavorite(e, movie) {
+    const Username = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+
+    axios
+      .delete(
+        `https://myflixmarvelapp.herokuapp.com/users/${Username}/favorites/${movie._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        this.componentDidMount();
+        alert("Removed Movie");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  // Deregister
   deleteUser() {
     const Username = localStorage.getItem("user");
     const token = localStorage.getItem("token");
 
     axios
-      .delete(`https://myflixmarvelapp.herokuapp.com/users/${username}`, {
+      .delete(`https://myflixmarvelapp.herokuapp.com/users/${Username}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response.data);
+        console.log(response);
+        alert("Deleted Profile");
         localStorage.removeItem("user");
         localStorage.removeItem("token");
-        window.open("/", "_self");
+        window.open(`/`, "_self");
       })
-      .catch((e) => {
+      .catch(function (error) {
         console.log(error);
       });
   }
 
   setUsername(value) {
-    this.setState({
-      Username: value,
-    });
-    this.Username = value;
+    this.state.Username = value;
   }
 
   setPassword(value) {
-    this.setState({
-      Password: value,
-    });
-    this.Password = value;
+    this.state.Password = value;
   }
 
   setEmail(value) {
-    this.setState({
-      Email: value,
-    });
-    this.Email = value;
+    this.state.Email = value;
   }
 
   setBirthday(value) {
-    this.setState({
-      Birthday: value,
-    });
-    this.Birthday = value;
+    this.state.Birthday = value;
   }
 
   render() {
@@ -160,108 +149,175 @@ export class ProfileView extends React.Component {
     const { FavoriteMovies, Username, Email, Birthday } = this.state;
 
     return (
-      <Container>
+      <Container className="profile-view">
         <Row>
           <Col>
-            <Card className="current-user">
-              <Card.Title>User Profile</Card.Title>
+            <Card className="user-profile">
+              <Card.Title className="font-weight-bold">
+                {Username} Profile
+              </Card.Title>
               <Card.Text>
-                <div>
-                  <span className="label">Username:</span>
+                <div className="profile-container">
+                  <span className="label">Username: </span>
                   <span className="value">{Username}</span>
-                </div>
-                <div>
-                  <span className="label">Email:</span>
+                  <br />
+                  <br />
+                  <span className="label">Email: </span>
                   <span className="value">{Email}</span>
-                </div>
-                <div>
-                  <span className="label">Birthday:</span>
+                  <br />
+                  <br />
+                  <span className="label">Birthday: </span>
                   <span className="value">{Birthday}</span>
                 </div>
               </Card.Text>
             </Card>
           </Col>
         </Row>
-
+        <br />
         <Row>
           <Col>
             <Card className="update-profile">
-              <Card.Title>Update Profile</Card.Title>
-              <Form className="formDisplay" onSubmit={(e) => this.editUser(e)}>
-                <Form.Group>
-                  <Form.Label>Username</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="Username"
-                    placeholder="New Username"
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                  ></Form.Control>
-                </Form.Group>
+              <Card.Body>
+                <Card.Title className="font-weight-bold">
+                  Update Profile
+                </Card.Title>
+                <Form
+                  className="update-form"
+                  onSubmit={(e) =>
+                    this.editUser(
+                      e,
+                      this.Username,
+                      this.Password,
+                      this.Email,
+                      this.Birthday
+                    )
+                  }
+                >
+                  <Form.Group>
+                    <Form.Label>Username</Form.Label>
+                    <br />
+                    <input
+                      type="text"
+                      name="Username"
+                      placeholder="New Username"
+                      onChange={(e) => this.setUsername(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
 
-                <Form.Group>
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    name="Password"
-                    placeholder="New Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  ></Form.Control>
-                </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Password</Form.Label>
+                    <br />
+                    <input
+                      type="password"
+                      name="Password"
+                      placeholder="New Password"
+                      onChange={(e) => this.setPassword(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
 
-                <Form.Group>
-                  <Form.Label>Email Address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    name="Email"
-                    placeholder="New Email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  ></Form.Control>
-                </Form.Group>
-              </Form>
+                  <Form.Group>
+                    <Form.Label>Email</Form.Label>
+                    <br />
+                    <input
+                      type="email"
+                      name="Email"
+                      placeholder="Enter Email"
+                      onChange={(e) => this.setEmail(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+
+                  <Form.Group>
+                    <Form.Label>Birthday</Form.Label>
+                    <br />
+                    <input
+                      type="date"
+                      name="Birthday"
+                      onChange={(e) => this.setBirthday(e.target.value)}
+                    />
+                  </Form.Group>
+                  <br />
+                  <div className="buttons">
+                    <Button
+                      variant="warning"
+                      type="submit"
+                      onClick={this.editUser}
+                    >
+                      Update User
+                    </Button>
+                    <Button
+                      className="delete-button"
+                      variant="danger"
+                      onClick={() => this.deleteUser()}
+                    >
+                      {" "}
+                      Delete User{" "}
+                    </Button>
+                  </div>
+                </Form>
+              </Card.Body>
             </Card>
           </Col>
         </Row>
-        <div className="bt">
-          <Button variant="warning" type="submit" onClick={this.editUser}>
-            Update User
-          </Button>
-          <Button
-            className="delete-button"
-            variant="danger"
-            onClick={() => this.deleteUser()}
-          >
-            Delete User
-          </Button>
-        </div>
-
-        <h3 className="favorite-movies">Favorite Movies</h3>
-
-        <Row>
-          {favorites &&
-            favorites.map((movie) => (
-              <Col lg={4} key={movie._id}>
-                <div>
-                  <MovieCard movie={movie} />
-                  <Button
-                    bg="danger"
-                    variant="danger"
-                    className="unfav-button"
-                    value={movie._id}
-                    onClick={(e) => this.removeFavorite(e, movie)}
-                  >
-                    Delete From Favorites
-                  </Button>
-                </div>
-              </Col>
-            ))}
-        </Row>
+        <br />
+        <Card>
+          <Row>
+            <Col>
+              <h4 className="font-weight-bold">Favorite Movies</h4>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Card.Body>
+                {FavoriteMovies.length === 0 && <div>No Favorite Movie</div>}
+                <Row>
+                  {FavoriteMovies.length > 0 &&
+                    movies.map((movie) => {
+                      if (
+                        movie._id ===
+                        FavoriteMovies.find((fav) => fav === movie._id)
+                      ) {
+                        return (
+                          <Card key={movie._id}>
+                            <Card.Body>
+                              <Card.Title className="font-weight-bold">
+                                {movie.Title}
+                              </Card.Title>
+                              <Card.Img
+                                variant="top"
+                                src={movie.ImagePath}
+                                crossOrigin="true"
+                                width="150"
+                                height="250"
+                                className="mt-1"
+                              />
+                              <Button
+                                size="sm"
+                                variant="danger"
+                                className="mt-1"
+                                value={movie._id}
+                                onClick={(e) => this.deleteFavorite(e, movie)}
+                              >
+                                {" "}
+                                Remove{" "}
+                              </Button>
+                            </Card.Body>
+                          </Card>
+                        );
+                      }
+                    })}
+                </Row>
+              </Card.Body>
+            </Col>
+          </Row>
+        </Card>
+        <br />
         <div className="backButton">
           <Button
             size="md"
-            variant="outline-primary"
+            variant="dark"
             onClick={() => {
               onBackClick(null);
             }}
@@ -269,6 +325,7 @@ export class ProfileView extends React.Component {
             Back
           </Button>
         </div>
+        <br />
       </Container>
     );
   }

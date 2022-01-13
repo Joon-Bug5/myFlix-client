@@ -83,7 +83,7 @@ export class MainView extends React.Component {
   }
 
   render() {
-    const { movies, user } = this.state;
+    const { movies, user, users } = this.state;
     return (
       <Router>
         <Container fluid>
@@ -165,15 +165,17 @@ export class MainView extends React.Component {
             render={({ match, history }) => {
               if (!user)
                 return (
-                  <Col>
-                    <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
-                  </Col>
+                  <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
                 );
               if (movies.length === 0) return <div className="main-view" />;
               return (
                 <Col md={8}>
                   <GenreView
-                    movie={movies.find((m) => m._id === match.params.genreId)}
+                    movies={movies}
+                    Genre={
+                      movies.find((m) => m.Genre.Name === match.params.Name)
+                        .Genre
+                    }
                     onBackClick={() => history.goBack()}
                   />
                 </Col>
@@ -186,18 +188,17 @@ export class MainView extends React.Component {
             render={({ match, history }) => {
               if (!user)
                 return (
-                  <Col>
-                    <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
-                  </Col>
+                  <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
                 );
               if (movies.length === 0) return <div className="main-view" />;
               return (
                 <Col md={8}>
                   <DirectorView
-                    director={
-                      movies.find((m) => m.Director.Name === match.params.name)
+                    Director={
+                      movies.find((m) => m.Director.Name === match.params.Name)
                         .Director
                     }
+                    movies={movies}
                     onBackClick={() => history.goBack()}
                   />
                 </Col>
