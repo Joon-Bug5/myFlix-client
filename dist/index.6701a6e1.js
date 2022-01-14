@@ -40234,7 +40234,6 @@ function RegistrationView(props) {
                                 children: "Please Register"
                             }),
                             /*#__PURE__*/ _jsxRuntime.jsxs(_reactBootstrap.Form, {
-                                onSubmit: this.handleSubmit,
                                 __source: {
                                     fileName: "src/components/registration-view/registration-view.jsx",
                                     lineNumber: 47

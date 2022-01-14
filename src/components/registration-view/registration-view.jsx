@@ -44,7 +44,7 @@ export function RegistrationView(props) {
           <CardGroup>
             <Card>
               <Card.Title>Please Register</Card.Title>
-              <Form onSubmit={this.handleSubmit}>
+              <Form>
                 <Form.Group>
                   <Form.Label>Username:</Form.Label>
                   <Form.Control
