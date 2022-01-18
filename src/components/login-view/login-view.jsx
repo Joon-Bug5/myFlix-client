@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { Form, Button, Container, Col, Row, Card } from "react-bootstrap";
 import "./login-view.scss";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export function LoginView(props) {
   const [username, setUsername] = useState("");
@@ -9,10 +12,18 @@ export function LoginView(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(username, password);
-    // Send a request to the server for authentication
-    // then calls props.onLoggedIn(username)
-    props.onLoggedIn(username);
+    axios
+      .post("https://myflixmarvelapp.herokuapp.com/login", {
+        Username: username,
+        Password: password,
+      })
+      .then((response) => {
+        const data = response.data;
+        props.onLoggedIn(data);
+      })
+      .catch((e) => {
+        console.log("no such user");
+      });
   };
 
   return (
@@ -45,20 +56,18 @@ export function LoginView(props) {
               </Form.Group>
               <Button
                 className="login-button"
-                variant="dark"
+                variant="primary"
                 type="submit"
                 onClick={handleSubmit}
               >
                 Log-In
               </Button>
-              <Button
-                className="register-button"
-                variant="dark"
-                type="submit"
-                onClick={handleSubmit}
-              >
-                Register
-              </Button>
+              <Link to={`/register`}>
+                <Button size="md" variant="primary" className="register-button">
+                  {" "}
+                  Register
+                </Button>
+              </Link>
             </Form>
           </Col>
         </Row>
@@ -66,7 +75,6 @@ export function LoginView(props) {
     </Container>
   );
 }
-
 LoginView.propTypes = {
   user: PropTypes.shape({
     Username: PropTypes.string.isRequired,
