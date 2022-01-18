@@ -46,6 +46,16 @@ body,
   text-align: center;
   margin: 15px;
 }
+* {
+  box-sizing: border-box;
+}
+
+.main-view {
+  font-family: "Open Sans", sans-serif;
+  background: #1897ff;
+  width: 100%;
+  display: inline-block;
+}
 .genre-card {
   text-align: center;
   margin: 5px;
@@ -68,15 +78,5 @@ body,
 
 .buttons {
   margin: 5px;
-}
-* {
-  box-sizing: border-box;
-}
-
-.main-view {
-  font-family: "Open Sans", sans-serif;
-  background: #1897ff;
-  width: 100%;
-  display: inline-block;
 }
 /*# sourceMappingURL=index.caa67093.css.map */
