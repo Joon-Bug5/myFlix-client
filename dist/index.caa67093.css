@@ -8,9 +8,6 @@ body,
   background-color: #000000;
   font-family: "Open Sans", sans-serif;
 }
-.movie-container {
-  text-align: center;
-}
 .movie-card {
   text-align: center;
   margin: 5px;
@@ -46,6 +43,16 @@ body,
   text-align: center;
   margin: 15px;
 }
+* {
+  box-sizing: border-box;
+}
+
+.main-view {
+  font-family: "Open Sans", sans-serif;
+  background: #1897ff;
+  width: 100%;
+  display: inline-block;
+}
 .genre-card {
   text-align: center;
   margin: 5px;
@@ -69,14 +76,7 @@ body,
 .buttons {
   margin: 5px;
 }
-* {
-  box-sizing: border-box;
-}
-
-.main-view {
-  font-family: "Open Sans", sans-serif;
-  background: #1897ff;
-  width: 100%;
-  display: inline-block;
+.movie-container {
+  text-align: center;
 }
 /*# sourceMappingURL=index.caa67093.css.map */
