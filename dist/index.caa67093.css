@@ -8,9 +8,6 @@ body,
   background-color: #000000;
   font-family: "Open Sans", sans-serif;
 }
-.movie-container {
-  text-align: center;
-}
 .movie-card {
   text-align: center;
   margin: 5px;
@@ -78,5 +75,8 @@ body,
 
 .buttons {
   margin: 5px;
+}
+.movie-container {
+  text-align: center;
 }
 /*# sourceMappingURL=index.caa67093.css.map */

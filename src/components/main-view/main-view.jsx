@@ -1,27 +1,29 @@
 import React from "react";
 import axios from "axios";
 
+import { connect } from "react-redux";
+
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+
+import { setMovies } from "../../actions/actions";
+
+import MoviesList from "../movies-list/movies-list";
 
 import "./main-view.scss";
 
 import { LoginView } from "../login-view/login-view";
 import { RegistrationView } from "../registration-view/registration-view";
-import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { GenreView } from "../genre-view/genre-view";
 import { DirectorView } from "../director-view/director-view";
 import { ProfileView } from "../profile-view/profile-view";
 import { Row, Col, Container, Navbar, Nav } from "react-bootstrap";
 
-export class MainView extends React.Component {
+class MainView extends React.Component {
   constructor() {
     super();
     this.state = {
-      movies: [],
-      selectedMovie: null,
       user: null,
-      registration: null,
     };
   }
 
@@ -58,10 +60,7 @@ export class MainView extends React.Component {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        // Assign the result to the state
-        this.setState({
-          movies: response.data,
-        });
+        this.props.setMovies(response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -80,10 +79,12 @@ export class MainView extends React.Component {
     this.setState({
       user: null,
     });
+    window.open("/", "_self");
   }
 
   render() {
-    const { movies, user, users } = this.state;
+    const { movies } = this.props;
+    const { user, users } = this.state;
     return (
       <Router>
         <Container fluid>
@@ -119,14 +120,9 @@ export class MainView extends React.Component {
                   </Col>
                 );
               if (movies.length === 0) return <div className="main-view" />;
-              return movies.map((m) => (
-                <Col md={3} key={m._id}>
-                  <MovieCard movie={m} />
-                </Col>
-              ));
+              return <MoviesList movies={movies} />;
             }}
           />
-
           <Route
             path="/register"
             render={() => {
@@ -232,4 +228,10 @@ export class MainView extends React.Component {
   }
 }
 
-// to have another root element in render(), need to close div as below and make seperate div for button
+let mapStateToProps = (state) => {
+  return {
+    movies: state.movies,
+  };
+};
+
+export default connect(mapStateToProps, { setMovies })(MainView);
