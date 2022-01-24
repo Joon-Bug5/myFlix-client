@@ -26148,7 +26148,7 @@ try {
 /* */ }
 /**
  * An `addEventListener` ponyfill, supports the `once` option
- *
+ * 
  * @param node the element
  * @param eventName the event name
  * @param handle the handler
@@ -26180,7 +26180,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 /**
  * A `removeEventListener` ponyfill
- *
+ * 
  * @param node the element
  * @param eventName the event name
  * @param handle the handler
@@ -42203,7 +42203,7 @@ var _excluded = [
   selectorFactory, which has the signature:
 
     (dispatch, options) => (nextState, nextOwnProps) => nextFinalProps
-
+  
   connect passes its args to connectAdvanced as options, which will in turn pass them to
   selectorFactory each time a Connect component instance is instantiated or hot reloaded.
 
