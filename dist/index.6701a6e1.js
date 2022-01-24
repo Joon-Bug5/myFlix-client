@@ -23215,8 +23215,7 @@ class MainView extends _reactDefault.default.Component {
                                 return(/*#__PURE__*/ _jsxRuntime.jsx(_profileView.ProfileView, {
                                     history: history,
                                     movies: movies,
-                                    users: users,
-                                    user: user,
+                                    user: user === match.params.username,
                                     onBackClick: ()=>history.goBack()
                                 }));
                             },
