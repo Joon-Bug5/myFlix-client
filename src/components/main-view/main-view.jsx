@@ -215,8 +215,7 @@ class MainView extends React.Component {
                 <ProfileView
                   history={history}
                   movies={movies}
-                  users={users}
-                  user={user}
+                  user={user === match.params.username}
                   onBackClick={() => history.goBack()}
                 />
               );
